@@ -74,7 +74,7 @@ const EstoqueSchema = new mongoose.Schema({
 });
 
 // Índice para melhorar a performance de buscas por item
-EstoqueSchema.index({ item: 1 });
+EstoqueSchema.index({ item: 1 }, { unique: true });
 EstoqueSchema.index({ categoria: 1 });
 EstoqueSchema.index({ ativo: 1 });
 

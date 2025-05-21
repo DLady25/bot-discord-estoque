@@ -28,7 +28,9 @@ module.exports = {
     ADMIN: '🔧',
     NOVO: '🆕',
     ZERAR: '🧹',
-    STATUS: '🤖'
+    STATUS: '🤖',
+    DESATIVAR: '🚫',
+    ATIVAR: '✅',
   },
   
   // Textos padrão para rodapés e mensagens comuns

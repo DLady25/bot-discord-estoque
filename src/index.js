@@ -328,6 +328,49 @@ client.on('interactionCreate', async interaction => {
     }
   }
 });
+client.on('interactionCreate', async interaction => {
+  if (interaction.isAutocomplete()) {
+    const command = client.commands.get(interaction.commandName);
+    if (!command) return;
+
+    try {
+      if (interaction.commandName === 'item-desativar' || 
+          interaction.commandName === 'item-ativar' || 
+          interaction.commandName === 'zerar' ||
+          interaction.commandName === 'ver') {
+        
+        const focusedValue = interaction.options.getFocused().toLowerCase();
+        let itens = [];
+        
+        // Buscar itens baseado no comando
+        if (interaction.commandName === 'item-ativar') {
+          // Para ativar, buscamos itens inativos
+          itens = await Estoque.find({ 
+            ativo: false,
+            item: { $regex: focusedValue, $options: 'i' }
+          }).limit(25);
+        } else {
+          // Para outros comandos, buscamos itens ativos
+          const filtroAtivo = interaction.commandName === 'item-desativar' ? true : true;
+          itens = await Estoque.find({ 
+            ativo: filtroAtivo,
+            item: { $regex: focusedValue, $options: 'i' }
+          }).limit(25);
+        }
+        
+        const choices = itens.map(item => ({
+          name: item.item.charAt(0).toUpperCase() + item.item.slice(1),
+          value: item.item
+        }));
+        
+        await interaction.respond(choices);
+      }
+    } catch (error) {
+      console.error('Erro no autocomplete:', error);
+    }
+  }
+});
+
 
 // ==============================================
 // INICIALIZAÇÃO
